@@ -1,0 +1,151 @@
+/* ===== AUTH PAGES ===== */
+.auth-container {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #fef2f2 100%);
+}
+
+.auth-form {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.auth-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* OTP Styles */
+.otp-instruction {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 28px !important;
+  letter-spacing: 10px;
+  font-weight: 700;
+  padding: 16px !important;
+}
+
+.otp-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.otp-footer p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== ADMIN AUTH ===== */
+.admin-auth-container {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.admin-auth-form {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(20px);
+}
+
+.admin-auth-form .auth-header h2 {
+  color: white;
+}
+
+.admin-auth-form .auth-header p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.admin-auth-form .form-group label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-auth-form .form-group input {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.admin-auth-form .form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.admin-auth-form .form-group input:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+.btn-admin {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: white !important;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-admin:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .auth-form {
+    padding: 32px 24px;
+    border-radius: var(--radius-lg);
+  }
+}
