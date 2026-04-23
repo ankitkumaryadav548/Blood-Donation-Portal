@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { requestAPI } from '../utils/api';
 import Loading from '../components/Loading';
 import '../styles/List.css';
@@ -12,11 +12,7 @@ const RequestsList = () => {
     urgency: '',
   });
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       const response = await requestAPI.getAllRequests(filters);
       setRequests(response.data.requests);
@@ -25,7 +21,11 @@ const RequestsList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

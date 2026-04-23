@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Home.css';
 
+import CompatibilityMap from '../components/CompatibilityMap';
+
 const Home = () => {
   return (
     <div className="home">
@@ -49,16 +51,9 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="blood-groups">
-        <h2>Blood Groups</h2>
-        <div className="blood-group-grid">
-          {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map((group) => (
-            <div key={group} className="blood-group-card">
-              <div className="blood-group-name">{group}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="container">
+        <CompatibilityMap />
+      </div>
 
       <section className="statistics">
         <h2>Our Impact</h2>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { requestAPI, donorAPI } from '../utils/api';
+import { requestAPI } from '../utils/api';
 import Alert from '../components/Alert';
 import Loading from '../components/Loading';
 import '../styles/Dashboard.css';
@@ -20,11 +20,7 @@ const RecipientDashboard = () => {
     description: '',
   });
 
-  useEffect(() => {
-    fetchUserRequests();
-  }, []);
-
-  const fetchUserRequests = async () => {
+  const fetchUserRequests = useCallback(async () => {
     try {
       const response = await requestAPI.getUserRequests();
       setUserRequests(response.data.requests);
@@ -33,7 +29,11 @@ const RecipientDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchUserRequests();
+  }, [fetchUserRequests]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;

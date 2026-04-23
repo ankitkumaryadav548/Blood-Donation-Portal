@@ -34,7 +34,7 @@ const DonorsList = () => {
   // Initial fetch
   useEffect(() => {
     fetchDonors();
-  }, []); // Only once on mount
+  }, [fetchDonors]); // Only once on mount
 
   // Trigger search when bloodGroup or availability changes
   const handleFilterSelect = (name, value) => {

@@ -1,0 +1,220 @@
+.compatibility-container {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  margin: 40px 0;
+  overflow: hidden;
+}
+
+.map-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.map-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.map-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.map-visual-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.blood-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.blood-node {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--bg-main);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
+.blood-node:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.node-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-name {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.node-label {
+  position: absolute;
+  bottom: 12px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* Status Styles */
+.blood-node.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.1);
+  box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+.blood-node.selected .group-name {
+  color: white;
+}
+
+.blood-node.selected .node-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.blood-node.can-give {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.blood-node.can-give .group-name {
+  color: var(--danger);
+}
+
+.blood-node.can-receive {
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+
+.blood-node.can-receive .group-name {
+  color: var(--success);
+}
+
+.blood-node.both {
+  background: linear-gradient(135deg, var(--danger-bg), var(--success-bg));
+  border-color: var(--accent);
+}
+
+/* Pulse Animation */
+.pulse-ring {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Legend */
+.map-legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px;
+  background: var(--bg-main);
+  border-radius: var(--radius-md);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot.you { background: var(--primary); }
+.dot.give { background: var(--danger); }
+.dot.receive { background: var(--success); }
+
+/* Details Section */
+.compatibility-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.detail-box {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.detail-box.give { background: linear-gradient(135deg, #fff5f5, #fff); border-left: 5px solid var(--danger); }
+.detail-box.receive { background: linear-gradient(135deg, #f0fff4, #fff); border-left: 5px solid var(--success); }
+
+.detail-box h4 {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.detail-groups {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.detail-groups .badge {
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.animate-in {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .blood-groups-grid { grid-template-columns: repeat(2, 1fr); }
+  .compatibility-details { grid-template-columns: 1fr; }
+  .map-legend { flex-direction: column; align-items: center; }
+}

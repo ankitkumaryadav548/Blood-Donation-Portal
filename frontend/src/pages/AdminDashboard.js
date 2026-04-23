@@ -24,13 +24,7 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'donors') fetchDonors();
-    if (activeTab === 'recipients') fetchRecipients();
-    if (activeTab === 'requests') fetchRequests();
-    if (activeTab === 'users') fetchUsers();
-  }, [activeTab, donorFilters, requestFilters]);
-
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       const response = await adminAPI.getAnalytics();
       setAnalytics(response.data.analytics);
@@ -39,9 +33,9 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchDonors = async () => {
+  const fetchDonors = useCallback(async () => {
     try {
       const params = {};
       if (donorFilters.bloodGroup) params.bloodGroup = donorFilters.bloodGroup;
@@ -52,18 +46,18 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Failed to fetch donors:', error);
     }
-  };
+  }, [donorFilters]);
 
-  const fetchRecipients = async () => {
+  const fetchRecipients = useCallback(async () => {
     try {
       const response = await adminAPI.getAllRecipients();
       setRecipients(response.data.recipients || []);
     } catch (error) {
       console.error('Failed to fetch recipients:', error);
     }
-  };
+  }, []);
 
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       const params = {};
       if (requestFilters.bloodGroup) params.bloodGroup = requestFilters.bloodGroup;
@@ -74,16 +68,27 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Failed to fetch requests:', error);
     }
-  };
+  }, [requestFilters]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await adminAPI.getAllUsers();
       setUsers(response.data.users || []);
     } catch (error) {
       console.error('Failed to fetch users:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchAnalytics();
+  }, [fetchAnalytics]);
+
+  useEffect(() => {
+    if (activeTab === 'donors') fetchDonors();
+    if (activeTab === 'recipients') fetchRecipients();
+    if (activeTab === 'requests') fetchRequests();
+    if (activeTab === 'users') fetchUsers();
+  }, [activeTab, fetchDonors, fetchRecipients, fetchRequests, fetchUsers]);
 
   const handleDeleteUser = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
