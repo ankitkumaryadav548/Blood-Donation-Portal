@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { adminAPI, requestAPI } from '../utils/api';
 import Alert from '../components/Alert';
 import Loading from '../components/Loading';
@@ -19,11 +19,6 @@ const AdminDashboard = () => {
   const [donorFilters, setDonorFilters] = useState({ bloodGroup: '', availability: '' });
   const [requestFilters, setRequestFilters] = useState({ bloodGroup: '', status: '' });
 
-  useEffect(() => {
-    fetchAnalytics();
-  }, []);
-
-  useEffect(() => {
   const fetchAnalytics = useCallback(async () => {
     try {
       const response = await adminAPI.getAnalytics();
