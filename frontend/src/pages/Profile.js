@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { authAPI } from '../utils/api';
+import api from '../utils/api';
 import Alert from '../components/Alert';
-import axios from 'axios';
 import '../styles/Rewards.css';
 import '../styles/Profile.css';
 
@@ -36,7 +36,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchGamification = async () => {
       try {
-        const response = await axios.get('/api/gamification/profile');
+        const response = await api.get('/gamification/profile');
         setGamification(response.data.gamification);
       } catch (error) {
         console.error('Failed to fetch rewards:', error);

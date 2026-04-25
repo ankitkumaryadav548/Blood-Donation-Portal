@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import Loading from '../components/Loading';
 import '../styles/Rewards.css';
 
@@ -10,7 +10,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get('/api/gamification/leaderboard');
+        const response = await api.get('/gamification/leaderboard');
         setLeaderboard(response.data.leaderboard);
       } catch (error) {
         console.error('Failed to fetch leaderboard:', error);
