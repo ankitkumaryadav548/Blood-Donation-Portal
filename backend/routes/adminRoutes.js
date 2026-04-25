@@ -24,4 +24,7 @@ router.get('/donors', adminMiddleware, adminController.getAllDonors);
 // Get all recipients with their requests
 router.get('/recipients', adminMiddleware, adminController.getAllRecipients);
 
+// Get all requests
+router.get('/requests', adminMiddleware, adminController.getAllRequests);
+
 module.exports = router;

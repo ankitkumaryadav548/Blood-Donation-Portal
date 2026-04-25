@@ -180,8 +180,22 @@
   border: 1px solid var(--border);
 }
 
-.detail-box.give { background: linear-gradient(135deg, #fff5f5, #fff); border-left: 5px solid var(--danger); }
-.detail-box.receive { background: linear-gradient(135deg, #f0fff4, #fff); border-left: 5px solid var(--success); }
+.detail-box.give { 
+  background: linear-gradient(135deg, var(--danger-bg), var(--bg-card)); 
+  border-left: 5px solid var(--danger); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-box.receive { 
+  background: linear-gradient(135deg, var(--success-bg), var(--bg-card)); 
+  border-left: 5px solid var(--success); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-box:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
 
 .detail-box h4 {
   margin-bottom: 16px;
@@ -195,13 +209,21 @@
 }
 
 .detail-groups .badge {
-  padding: 6px 12px;
-  background: white;
+  padding: 8px 16px;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-weight: 700;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
   font-size: 14px;
+  color: var(--text-primary);
   box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.detail-groups .badge:hover {
+  border-color: var(--primary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .animate-in {

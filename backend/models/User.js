@@ -45,6 +45,28 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
+    badges: [
+      {
+        name: String,
+        icon: String,
+        awardedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    level: {
+      type: Number,
+      default: 1,
+    },
+    xp: {
+      type: Number,
+      default: 0,
+    },
     createdAt: {
       type: Date,
       default: Date.now,

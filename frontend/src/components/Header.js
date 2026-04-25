@@ -25,6 +25,7 @@ const Header = () => {
           <Link to="/">Home</Link>
           <Link to="/requests">Requests</Link>
           <Link to="/donors">Donors</Link>
+          <Link to="/leaderboard">🏆 Leaderboard</Link>
 
           <ThemeToggle />
 
@@ -36,7 +37,12 @@ const Header = () => {
               <div className="user-menu">
                 <Link to="/profile" className="user-name-link">
                   <span className="user-avatar-mini">{user.name?.charAt(0)?.toUpperCase()}</span>
-                  <span className="user-name">{user.name}</span>
+                  <div className="user-info-stack">
+                    <span className="user-name">{user.name}</span>
+                    {user.points !== undefined && (
+                      <span className="user-points">🪙 {user.points} pts</span>
+                    )}
+                  </div>
                 </Link>
                 <span className="user-role-tag">{user.role}</span>
                 <button onClick={handleLogout} className="logout-btn">

@@ -4,12 +4,18 @@ const User = require('../models/User');
 // Get all donors
 exports.getAllDonors = async (req, res) => {
   try {
-    const { bloodGroup, location, availability } = req.query;
+    const { bloodGroup, location, availability, country, state, district, city } = req.query;
     let query = {};
 
     if (bloodGroup) query.bloodGroup = bloodGroup;
-    if (location) query.location = new RegExp(location, 'i');
     if (availability) query.availability = availability;
+    
+    // Support both old 'location' search and new structured filters
+    if (location) query.location = new RegExp(location, 'i');
+    if (country) query.country = country;
+    if (state) query.state = state;
+    if (district) query.district = district;
+    if (city) query.city = city;
 
     const donors = await Donor.find(query)
       .populate('userId', 'name phoneNo email')
@@ -28,9 +34,9 @@ exports.getAllDonors = async (req, res) => {
 // Create donor profile
 exports.createDonor = async (req, res) => {
   try {
-    const { bloodGroup, age, location, latitude, longitude } = req.body;
+    const { bloodGroup, age, location, country, state, district, city, latitude, longitude } = req.body;
 
-    if (!bloodGroup || !age || !location) {
+    if (!bloodGroup || !age) {
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
@@ -45,6 +51,10 @@ exports.createDonor = async (req, res) => {
       bloodGroup,
       age,
       location,
+      country,
+      state,
+      district,
+      city,
       latitude: latitude || null,
       longitude: longitude || null,
     });
@@ -129,7 +139,7 @@ exports.getDonationHistory = async (req, res) => {
 // Update donor profile
 exports.updateDonorProfile = async (req, res) => {
   try {
-    const { bloodGroup, age, location, latitude, longitude } = req.body;
+    const { bloodGroup, age, location, country, state, district, city, latitude, longitude } = req.body;
 
     const donor = await Donor.findOneAndUpdate(
       { userId: req.user.id },
@@ -137,6 +147,10 @@ exports.updateDonorProfile = async (req, res) => {
         bloodGroup,
         age,
         location,
+        country,
+        state,
+        district,
+        city,
         latitude,
         longitude,
       },

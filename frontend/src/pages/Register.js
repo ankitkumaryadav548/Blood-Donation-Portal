@@ -21,7 +21,8 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const stateName = name.replace('portal_reg_', '');
+    setFormData({ ...formData, [stateName]: value });
   };
 
   const getRedirectPath = (role) => {
@@ -144,13 +145,13 @@ const Register = () => {
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div className="form-group">
               <label htmlFor="reg-name">Full Name</label>
               <input
                 id="reg-name"
                 type="text"
-                name="name"
+                name="portal_reg_name"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -163,11 +164,12 @@ const Register = () => {
               <input
                 id="reg-email"
                 type="email"
-                name="email"
+                name="portal_reg_email"
                 value={formData.email}
                 onChange={handleChange}
                 required
                 placeholder="Enter your email"
+                autoComplete="new-password"
               />
             </div>
 
@@ -176,48 +178,47 @@ const Register = () => {
               <input
                 id="reg-phone"
                 type="tel"
-                name="phoneNo"
+                name="portal_reg_phoneNo"
                 value={formData.phoneNo}
                 onChange={handleChange}
                 required
                 placeholder="Enter your phone number"
+                autoComplete="new-password"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="reg-role">I want to register as</label>
-              <select id="reg-role" name="role" value={formData.role} onChange={handleChange}>
-                <option value="recipient">Recipient (Need Blood)</option>
-                <option value="donor">Donor (Give Blood)</option>
+              <label htmlFor="reg-role">How can we help you today?</label>
+              <select id="reg-role" name="portal_reg_role" value={formData.role} onChange={handleChange}>
+                <option value="recipient">Recipient</option>
+                <option value="donor">Donor</option>
               </select>
             </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="reg-password">Password</label>
-                <input
-                  id="reg-password"
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="Min 6 characters"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="reg-confirm">Confirm Password</label>
-                <input
-                  id="reg-confirm"
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  placeholder="Re-enter password"
-                />
-              </div>
+            <div className="form-group">
+              <label htmlFor="reg-password">Password</label>
+              <input
+                id="reg-password"
+                type="password"
+                name="portal_reg_password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                placeholder="Choose a secure password (min 6 characters)"
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="reg-confirm">Confirm Password</label>
+              <input
+                id="reg-confirm"
+                type="password"
+                name="portal_reg_confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                placeholder="Re-enter your password to confirm"
+                autoComplete="new-password"
+              />
             </div>
 
             <button type="submit" className="btn btn-primary btn-block" disabled={loading}>

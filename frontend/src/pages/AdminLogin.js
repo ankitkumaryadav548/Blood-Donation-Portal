@@ -12,7 +12,8 @@ const AdminLogin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const stateName = name.replace('portal_admin_', '');
+    setFormData({ ...formData, [stateName]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -58,17 +59,18 @@ const AdminLogin = () => {
           <p>Sign in with your administrator credentials</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="admin-email">Admin Email</label>
             <input
               id="admin-email"
               type="email"
-              name="email"
+              name="portal_admin_email"
               value={formData.email}
               onChange={handleChange}
               required
               placeholder="Enter admin email"
+              autoComplete="new-password"
             />
           </div>
 
@@ -77,11 +79,12 @@ const AdminLogin = () => {
             <input
               id="admin-password"
               type="password"
-              name="password"
+              name="portal_admin_password"
               value={formData.password}
               onChange={handleChange}
               required
               placeholder="Enter admin password"
+              autoComplete="new-password"
             />
           </div>
 

@@ -42,7 +42,7 @@ export const requestAPI = {
   createRequest: (requestData) => api.post('/requests', requestData),
   getRequest: (id) => api.get(`/requests/${id}`),
   getUserRequests: () => api.get('/requests/user/my-requests'),
-  updateRequestStatus: (id, status) => api.put(`/requests/${id}/status`, { status }),
+  updateRequestStatus: (id, status, fulfilledBy) => api.put(`/requests/${id}/status`, { status, fulfilledBy }),
   searchMatchingDonors: (filters) => api.get('/requests/search/donors', { params: filters }),
   deleteRequest: (id) => api.delete(`/requests/${id}`),
 };
@@ -56,6 +56,14 @@ export const adminAPI = {
   manageRequest: (requestId, data) => api.put(`/admin/requests/${requestId}`, data),
   getAllDonors: (params) => api.get('/admin/donors', { params }),
   getAllRecipients: () => api.get('/admin/recipients'),
+  getAllRequests: () => api.get('/admin/requests'),
+};
+
+// Report API calls
+export const reportAPI = {
+  createReport: (data) => api.post('/reports', data),
+  getAllReports: () => api.get('/reports'),
+  updateReportStatus: (id, status) => api.put(`/reports/${id}`, { status }),
 };
 
 export default api;

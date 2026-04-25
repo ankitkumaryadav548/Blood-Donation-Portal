@@ -20,7 +20,20 @@ const donorSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      required: [true, 'Please provide location'],
+      required: false,
+    },
+    country: {
+      type: String,
+      default: 'India',
+    },
+    state: {
+      type: String,
+    },
+    district: {
+      type: String,
+    },
+    city: {
+      type: String,
     },
     latitude: {
       type: Number,

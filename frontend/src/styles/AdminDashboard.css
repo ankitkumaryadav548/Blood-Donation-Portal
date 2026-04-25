@@ -512,3 +512,78 @@
   color: white;
   box-shadow: 0 2px 6px var(--primary-glow);
 }
+.admin-summary-box {
+  background: var(--bg-main);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  margin-top: 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-summary-box h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.summary-details p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.status-resolved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-dismissed {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+/* Blood Badges */
+.blood-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.blood-badge.Apos, .blood-badge.Aneg { background: #fee2e2; color: #b91c1c; }
+.blood-badge.Bpos, .blood-badge.Bneg { background: #dcfce7; color: #15803d; }
+.blood-badge.Opos, .blood-badge.Oneg { background: #fef9c3; color: #a16207; }
+.blood-badge.ABpos, .blood-badge.ABneg { background: #f3e8ff; color: #7e22ce; }
+
+.urgency-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.hospital-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.hospital-cell strong { color: var(--text-primary); font-size: 14px; }
+.hospital-cell small { color: var(--text-muted); font-size: 12px; }

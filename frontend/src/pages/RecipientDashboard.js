@@ -19,6 +19,10 @@ const RecipientDashboard = () => {
     unitsRequired: 1,
     description: '',
   });
+  const [fulfillmentData, setFulfillmentData] = useState({
+    requestId: null,
+    donorId: ''
+  });
 
   const fetchUserRequests = useCallback(async () => {
     try {
@@ -58,6 +62,25 @@ const RecipientDashboard = () => {
     } catch (error) {
       setAlert({
         message: error.response?.data?.message || 'Failed to create request',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleStatusUpdate = async (id, status, donorId = null) => {
+    try {
+      await requestAPI.updateRequestStatus(id, status, donorId);
+      setAlert({ 
+        message: status === 'fulfilled' 
+          ? `Amazing! Request fulfilled. You earned 50 points! ${donorId ? 'Donor also rewarded.' : ''}` 
+          : `Request marked as ${status}!`, 
+        type: 'success' 
+      });
+      setFulfillmentData({ requestId: null, donorId: '' });
+      fetchUserRequests();
+    } catch (error) {
+      setAlert({
+        message: error.response?.data?.message || 'Failed to update request',
         type: 'error',
       });
     }
@@ -214,12 +237,54 @@ const RecipientDashboard = () => {
                 <p><strong>Urgency:</strong> {request.urgencyLevel.toUpperCase()}</p>
                 <p><strong>Matched Donors:</strong> {request.matchedDonors?.length || 0}</p>
                 {request.status === 'pending' && (
-                  <button
-                    onClick={() => handleDeleteRequest(request._id)}
-                    className="btn btn-danger"
-                  >
-                    Delete Request
-                  </button>
+                  <div className="card-actions">
+                    {fulfillmentData.requestId === request._id ? (
+                      <div className="fulfillment-form">
+                        <label>Who helped you?</label>
+                        <select 
+                          value={fulfillmentData.donorId} 
+                          onChange={(e) => setFulfillmentData({...fulfillmentData, donorId: e.target.value})}
+                          className="donor-select"
+                        >
+                          <option value="">Select Donor (Optional)</option>
+                          {request.matchedDonors?.map(donor => (
+                            <option key={donor._id} value={donor._id}>
+                              {donor.userId?.name || 'Matched Donor'}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="btn-group-sm">
+                          <button 
+                            onClick={() => handleStatusUpdate(request._id, 'fulfilled', fulfillmentData.donorId)}
+                            className="btn btn-success btn-sm"
+                          >
+                            Confirm & Get Points
+                          </button>
+                          <button 
+                            onClick={() => setFulfillmentData({ requestId: null, donorId: '' })}
+                            className="btn btn-secondary btn-sm"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setFulfillmentData({ requestId: request._id, donorId: '' })}
+                          className="btn btn-success"
+                        >
+                          Mark as Fulfilled
+                        </button>
+                        <button
+                          onClick={() => handleDeleteRequest(request._id)}
+                          className="btn btn-danger"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
             ))}

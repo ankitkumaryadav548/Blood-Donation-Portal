@@ -193,3 +193,20 @@ exports.getAllRecipients = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch recipients', error: error.message });
   }
 };
+// Get all blood requests for admin
+exports.getAllRequests = async (req, res) => {
+  try {
+    const requests = await Request.find()
+      .populate('userId', 'name email phoneNo')
+      .populate('matchedDonors', 'bloodGroup availability')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: requests.length,
+      requests,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch requests', error: error.message });
+  }
+};

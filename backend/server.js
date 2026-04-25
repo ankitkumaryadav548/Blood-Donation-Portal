@@ -9,6 +9,8 @@ const authRoutes = require('./routes/authRoutes');
 const donorRoutes = require('./routes/donorRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const gamificationRoutes = require('./routes/gamificationRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/donors', donorRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/gamification', gamificationRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

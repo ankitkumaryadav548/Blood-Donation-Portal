@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { donorAPI, requestAPI } from '../utils/api';
 import Alert from '../components/Alert';
 import Loading from '../components/Loading';
+import { Country, State, City } from 'country-state-city';
 import '../styles/Dashboard.css';
 
 const DonorDashboard = () => {
@@ -15,8 +16,32 @@ const DonorDashboard = () => {
   const [formData, setFormData] = useState({
     bloodGroup: '',
     age: '',
-    location: '',
+    country: 'IN', // Use ISO code initially
+    state: '',      // Use ISO code initially
+    city: '',
   });
+
+  const [countries] = useState(Country.getAllCountries());
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if (formData.country) {
+      setStates(State.getStatesOfCountry(formData.country));
+    } else {
+      setStates([]);
+    }
+    setFormData(prev => ({ ...prev, state: '', city: '' }));
+  }, [formData.country]);
+
+  useEffect(() => {
+    if (formData.country && formData.state) {
+      setCities(City.getCitiesOfState(formData.country, formData.state));
+    } else {
+      setCities([]);
+    }
+    setFormData(prev => ({ ...prev, city: '' }));
+  }, [formData.country, formData.state]);
 
   useEffect(() => {
     fetchDonorData();
@@ -53,10 +78,20 @@ const DonorDashboard = () => {
   const handleCreateDonorProfile = async (e) => {
     e.preventDefault();
     try {
-      await donorAPI.createDonor(formData);
+      // Prepare data with names instead of codes for the backend
+      const countryName = Country.getCountryByCode(formData.country)?.name || formData.country;
+      const stateName = State.getStateByCodeAndCountry(formData.state, formData.country)?.name || formData.state;
+      
+      const submitData = {
+        ...formData,
+        country: countryName,
+        state: stateName,
+      };
+
+      await donorAPI.createDonor(submitData);
       setAlert({ message: 'Donor profile created successfully!', type: 'success' });
       setShowForm(false);
-      setFormData({ bloodGroup: '', age: '', location: '' });
+      setFormData({ bloodGroup: '', age: '', country: 'IN', state: '', city: '' });
       fetchDonorData();
     } catch (error) {
       setAlert({
@@ -136,16 +171,29 @@ const DonorDashboard = () => {
                 />
               </div>
 
+
               <div className="form-group">
-                <label>Location</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleFormChange}
-                  required
-                  placeholder="Enter your location"
-                />
+                <label>Country</label>
+                <select name="country" value={formData.country} onChange={handleFormChange} required>
+                  <option value="">Select Country</option>
+                  {countries.map(c => <option key={c.isoCode} value={c.isoCode}>{c.name}</option>)}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>State</label>
+                <select name="state" value={formData.state} onChange={handleFormChange} required disabled={!formData.country}>
+                  <option value="">Select State</option>
+                  {states.map(s => <option key={s.isoCode} value={s.isoCode}>{s.name}</option>)}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>City</label>
+                <select name="city" value={formData.city} onChange={handleFormChange} required disabled={!formData.state}>
+                  <option value="">Select City</option>
+                  {cities.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                </select>
               </div>
 
               <button type="submit" className="btn btn-primary">
@@ -175,7 +223,7 @@ const DonorDashboard = () => {
             </div>
             <div className="info-item">
               <label>Location:</label>
-              <span>{donorProfile.location}</span>
+              <span>{donorProfile.city}{donorProfile.city && donorProfile.state ? ', ' : ''}{donorProfile.state}</span>
             </div>
             <div className="info-item">
               <label>Status:</label>

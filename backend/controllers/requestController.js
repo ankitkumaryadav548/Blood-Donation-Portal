@@ -1,5 +1,6 @@
 const Request = require('../models/Request');
 const Donor = require('../models/Donor');
+const { awardPoints } = require('./gamificationController');
 
 // Create blood request
 exports.createRequest = async (req, res) => {
@@ -40,6 +41,9 @@ exports.createRequest = async (req, res) => {
     request.matchedDonors = matchedDonors.map((donor) => donor._id);
     await request.save();
 
+    // Award points for creating a request (10 pts)
+    await awardPoints(req.user.id, 10, 20);
+
     res.status(201).json({
       success: true,
       message: 'Blood request created successfully',
@@ -62,7 +66,13 @@ exports.getAllRequests = async (req, res) => {
 
     const requests = await Request.find(query)
       .populate('userId', 'name phoneNo email')
-      .populate('matchedDonors', 'bloodGroup availability location')
+      .populate({
+        path: 'matchedDonors',
+        populate: {
+          path: 'userId',
+          select: 'name phoneNo email',
+        },
+      })
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -80,7 +90,13 @@ exports.getRequest = async (req, res) => {
   try {
     const request = await Request.findById(req.params.id)
       .populate('userId', 'name phoneNo email')
-      .populate('matchedDonors', 'bloodGroup availability location');
+      .populate({
+        path: 'matchedDonors',
+        populate: {
+          path: 'userId',
+          select: 'name phoneNo email',
+        },
+      });
 
     if (!request) {
       return res.status(404).json({ message: 'Request not found' });
@@ -96,7 +112,13 @@ exports.getRequest = async (req, res) => {
 exports.getUserRequests = async (req, res) => {
   try {
     const requests = await Request.find({ userId: req.user.id })
-      .populate('matchedDonors', 'bloodGroup availability location')
+      .populate({
+        path: 'matchedDonors',
+        populate: {
+          path: 'userId',
+          select: 'name phoneNo email',
+        },
+      })
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -122,10 +144,37 @@ exports.updateRequestStatus = async (req, res) => {
       req.params.id,
       { status },
       { new: true }
-    ).populate('matchedDonors', 'bloodGroup availability location');
+    ).populate({
+      path: 'matchedDonors',
+      populate: {
+        path: 'userId',
+        select: 'name phoneNo email',
+      },
+    });
 
     if (!request) {
       return res.status(404).json({ message: 'Request not found' });
+    }
+
+    // Award points if fulfilled
+    if (status === 'fulfilled') {
+      // Award points to the requester (50 pts for closing a request)
+      await awardPoints(request.userId, 50, 100);
+
+      // If a specific donor was specified as fulfilling it (or first matched donor)
+      const { fulfilledBy } = req.body;
+      if (fulfilledBy) {
+        const donor = await Donor.findById(fulfilledBy);
+        if (donor) {
+          // Award points to the donor (500 pts for saving a life!)
+          await awardPoints(donor.userId, 500, 1000, 'Life Saver');
+          
+          // Increment total donations
+          donor.totalDonations += 1;
+          donor.lastDonationDate = new Date();
+          await donor.save();
+        }
+      }
     }
 
     res.status(200).json({

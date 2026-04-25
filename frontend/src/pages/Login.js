@@ -12,7 +12,8 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const stateName = name.replace('portal_user_', '');
+    setFormData({ ...formData, [stateName]: value });
   };
 
   const getRedirectPath = (role) => {
@@ -56,17 +57,18 @@ const Login = () => {
           <p>Sign in as a Donor or Recipient</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="login-email">Email Address</label>
             <input
               id="login-email"
               type="email"
-              name="email"
+              name="portal_user_email"
               value={formData.email}
               onChange={handleChange}
               required
               placeholder="Enter your email"
+              autoComplete="new-password"
             />
           </div>
 
@@ -75,11 +77,12 @@ const Login = () => {
             <input
               id="login-password"
               type="password"
-              name="password"
+              name="portal_user_password"
               value={formData.password}
               onChange={handleChange}
               required
               placeholder="Enter your password"
+              autoComplete="new-password"
             />
           </div>
 

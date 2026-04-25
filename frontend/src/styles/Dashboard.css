@@ -87,7 +87,8 @@
 /* Create Request / Donor Form Section */
 .create-request-section,
 .donor-form-section {
-  background: var(--bg-card);
+  background: var(--bg-request-tint);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow: var(--shadow-md);
@@ -131,7 +132,8 @@
 }
 
 .request-card {
-  background: var(--bg-card);
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -218,4 +220,42 @@
   .requests-list {
     grid-template-columns: 1fr;
   }
+}
+
+/* Fulfillment Form Styles */
+.fulfillment-form {
+  background: var(--bg-main);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  margin-top: 12px;
+  border: 1px solid var(--border);
+}
+
+.fulfillment-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.donor-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: white;
+  margin-bottom: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.btn-group-sm {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
 }

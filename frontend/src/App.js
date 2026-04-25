@@ -16,6 +16,8 @@ import RecipientDashboard from './pages/RecipientDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import Profile from './pages/Profile';
+import Leaderboard from './pages/Leaderboard';
+import RequestDetails from './pages/RequestDetails';
 
 import './App.css';
 
@@ -57,6 +59,8 @@ function AppContent() {
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/donors" element={<DonorsList />} />
             <Route path="/requests" element={<RequestsList />} />
+            <Route path="/requests/:id" element={<RequestDetails />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
 
             <Route
               path="/donor-dashboard"
