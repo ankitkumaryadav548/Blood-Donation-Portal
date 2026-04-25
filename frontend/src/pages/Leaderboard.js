@@ -11,7 +11,10 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         const response = await api.get('/gamification/leaderboard');
-        setLeaderboard(response.data.leaderboard);
+        console.log('Leaderboard data:', response.data);
+        if (response.data && response.data.leaderboard) {
+          setLeaderboard(response.data.leaderboard);
+        }
       } catch (error) {
         console.error('Failed to fetch leaderboard:', error);
       } finally {
@@ -35,18 +38,18 @@ const Leaderboard = () => {
           <div className="no-results">No donors on the leaderboard yet. Be the first to save a life!</div>
         ) : (
           leaderboard.map((user, index) => (
-            <div key={user._id} className={`leaderboard-item rank-${index + 1}`}>
+            <div key={user?._id || index} className={`leaderboard-item rank-${index + 1}`}>
               <div className="rank-badge">
                 {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
               </div>
               <div className="user-info">
                 <div className="user-avatar">
-                  {user.name.charAt(0).toUpperCase()}
+                  {user?.name ? user.name.charAt(0).toUpperCase() : '?'}
                 </div>
                 <div className="user-details">
-                  <h3>{user.name}</h3>
+                  <h3>{user?.name || 'Anonymous Donor'}</h3>
                   <div className="user-badges">
-                    {user.badges.slice(0, 3).map((badge, bIndex) => (
+                    {user?.badges?.slice(0, 3).map((badge, bIndex) => (
                       <span key={bIndex} title={badge.name} className="badge-mini">{badge.icon}</span>
                     ))}
                   </div>
@@ -54,11 +57,11 @@ const Leaderboard = () => {
               </div>
               <div className="user-stats">
                 <div className="stat-item">
-                  <span className="stat-value">{user.points}</span>
+                  <span className="stat-value">{user?.points || 0}</span>
                   <span className="stat-label">Points</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-value">Lv. {user.level}</span>
+                  <span className="stat-value">Lv. {user?.level || 1}</span>
                 </div>
               </div>
             </div>
