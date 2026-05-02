@@ -4,6 +4,7 @@ import { AuthContext, AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Loading from './components/Loading';
+import Chatbot from './components/Chatbot';
 
 // Pages
 import Home from './pages/Home';
@@ -101,6 +102,7 @@ function AppContent() {
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
+        <Chatbot />
         <Footer />
       </div>
     </Router>
