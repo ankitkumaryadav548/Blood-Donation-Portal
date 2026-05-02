@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import '../styles/Chatbot.css';
 
 const Chatbot = () => {
@@ -36,7 +36,7 @@ const Chatbot = () => {
 
     try {
       // Send message to our backend, which talks to Gemini
-      const res = await axios.post('/api/ai/chat', {
+      const res = await api.post('/ai/chat', {
         message: userMessage.text,
         history: messages // pass previous conversation history
       });
