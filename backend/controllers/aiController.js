@@ -1,10 +1,5 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Ensure the API key is available
-const genAI = process.env.GEMINI_API_KEY 
-  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) 
-  : null;
-
 /**
  * @desc    Chat with AI Assistant
  * @route   POST /api/ai/chat
@@ -18,13 +13,15 @@ const chatWithAI = async (req, res) => {
       return res.status(400).json({ message: 'Message is required' });
     }
 
-    if (!genAI) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
       return res.status(200).json({ 
         success: true,
-        reply: 'I am not fully configured yet! The site administrator needs to add a GEMINI_API_KEY to the backend .env file.' 
+        reply: 'I am not fully configured yet! The site administrator needs to add a GEMINI_API_KEY to the backend .env file or environment variables.' 
       });
     }
 
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     // System instructions context for the blood donation portal
