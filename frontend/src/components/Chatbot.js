@@ -70,7 +70,6 @@ const Chatbot = () => {
         <div className="chatbot-window">
           <div className="chatbot-header">
             <h3>AI Assistant</h3>
-            <p>Powered by Gemini</p>
           </div>
           
           <div className="chatbot-messages">
