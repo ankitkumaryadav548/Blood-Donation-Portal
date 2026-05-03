@@ -25,9 +25,9 @@ const Footer = () => {
 
         <div className="footer-section">
           <h3>Contact</h3>
-          <p>Email: info@blooddonation.com</p>
-          <p>Phone: +1-234-567-8900</p>
-          <p>Address: 123 Health Street, Medical City</p>
+          <p>Email: ankityadav02032003@gmail.com</p>
+          <p>Phone: 9508731982</p>
+          <p>Address: LPU , jalandher Punjab , India</p>
         </div>
       </div>
 

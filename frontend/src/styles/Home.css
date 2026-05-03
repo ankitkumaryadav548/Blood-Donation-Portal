@@ -182,11 +182,11 @@
 .section-header h2 {
   font-size: 2.5rem;
   font-weight: 900;
-  color: #0f172a;
+  color: var(--text-primary);
 }
 
 .section-header p {
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -225,8 +225,8 @@
 }
 
 [data-theme="dark"] .feature-num {
-  color: #000000;
-  opacity: 0.9;
+  color: var(--text-primary);
+  opacity: 0.2;
 }
 
 .feature-icon-box {
@@ -248,11 +248,11 @@
   font-size: 1.4rem;
   font-weight: 800;
   margin-bottom: 12px;
-  color: #0f172a;
+  color: var(--text-primary);
 }
 
 .feature-item p {
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -291,7 +291,7 @@
 .final-cta {
   padding: 120px 5%;
   text-align: center;
-  background: white;
+  background: var(--bg-card);
 }
 
 .cta-content h2 {
