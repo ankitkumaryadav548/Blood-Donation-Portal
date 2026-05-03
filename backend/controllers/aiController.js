@@ -21,32 +21,18 @@ const chatWithAI = async (req, res) => {
       });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const genAI = new GoogleGenerativeAI(apiKey.trim());
+    
+    // Using the verified available model for your key
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-    // System instructions context for the blood donation portal
-    const systemPrompt = `
-      You are a helpful, empathetic, and knowledgeable AI assistant for a Blood Donation Portal called "BloodLink" (or generic blood donation portal).
-      Your goal is to assist users with questions about donating blood, receiving blood, eligibility criteria, and navigating the platform.
-      
-      Key Guidelines:
-      - Be polite, concise, and highly informative.
-      - If someone asks about blood type compatibility, provide accurate medical facts (e.g., O- is universal donor, AB+ is universal recipient).
-      - If asked about the process, briefly explain that they can register as a donor or request blood via the platform's dashboard.
-      - Do not provide actual medical diagnoses. Advise consulting a doctor for specific health concerns.
-      - Maintain a professional and encouraging tone.
-
-      User's latest message: ${message}
-    `;
-
-    // Format previous history for Gemini (if any)
+    // Format previous history for Gemini
     let formattedHistory = history && Array.isArray(history) ? history.map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
     })) : [];
 
     // Gemini requires the history to start with a 'user' message. 
-    // If the first message is the default 'model' greeting, we remove it.
     while (formattedHistory.length > 0 && formattedHistory[0].role === 'model') {
       formattedHistory.shift();
     }
@@ -56,6 +42,10 @@ const chatWithAI = async (req, res) => {
       history: formattedHistory,
     });
 
+    // Add system instruction as a prefix to the first message if it's a new chat
+    const systemPrompt = `Assistant for BloodLink Portal. Help with blood donation/requests. Be empathetic. User says: ${message}`;
+
+    // Send the message
     const result = await chat.sendMessage(systemPrompt);
     const responseText = result.response.text();
 
@@ -65,10 +55,16 @@ const chatWithAI = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('AI Chat Error:', error);
+    console.error('AI Chat Error Details:', {
+      message: error.message,
+      status: error.status,
+      statusText: error.statusText,
+      stack: error.stack
+    });
+    
     res.status(500).json({ 
       success: false, 
-      message: 'Failed to communicate with AI',
+      message: 'The AI service is currently unavailable. Please check your API key or model configuration.',
       error: error.message 
     });
   }
