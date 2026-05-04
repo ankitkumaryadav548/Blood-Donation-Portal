@@ -9,8 +9,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  family: 4, // Force IPv4 to avoid ENETUNREACH issues on cloud hosts
   tls: {
-    rejectUnauthorized: false, // Helps with certificate issues on some cloud hosts
+    rejectUnauthorized: false,
   },
   pool: true,
   maxConnections: 3,
