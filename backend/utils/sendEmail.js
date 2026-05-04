@@ -1,13 +1,13 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-  // Manually resolve to IPv4 address to bypass ENETUNREACH (IPv6) issues on cloud hosts
-  let host = 'smtp.gmail.com';
+  // Using smtp.googlemail.com as an alternative to smtp.gmail.com
+  let host = 'smtp.googlemail.com';
   try {
     const dns = require('dns').promises;
-    const lookup = await dns.lookup('smtp.gmail.com', { family: 4 });
+    const lookup = await dns.lookup('smtp.googlemail.com', { family: 4 });
     host = lookup.address;
-    console.log('Resolved smtp.gmail.com to IPv4:', host);
+    console.log('Resolved smtp.googlemail.com to IPv4:', host);
   } catch (dnsErr) {
     console.error('DNS Lookup failed, falling back to hostname:', dnsErr);
   }
@@ -22,12 +22,11 @@ const sendEmail = async (options) => {
     },
     tls: {
       rejectUnauthorized: false,
-      servername: 'smtp.gmail.com',
+      servername: 'smtp.googlemail.com',
     },
-    pool: true,
-    maxConnections: 3,
-    connectionTimeout: 30000, // Increased to 30 seconds
-    socketTimeout: 45000,
+    connectionTimeout: 40000, 
+    greetingTimeout: 40000,
+    socketTimeout: 60000,
   });
 
   const message = {
