@@ -18,6 +18,7 @@ const sendEmail = async (options) => {
     method: 'POST',
     headers: {
       'api-key': process.env.EMAIL_PASS,
+      'x-sib-api-key': process.env.EMAIL_PASS, // Standard header for Brevo API v3
       'Content-Type': 'application/json',
       'Content-Length': data.length,
     },
