@@ -1,6 +1,9 @@
 require('dotenv').config();
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '8.8.4.4']); // Use Google DNS to resolve Atlas SRV records
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first'); // Force IPv4 over IPv6
+}
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
