@@ -3,21 +3,21 @@ const nodemailer = require('nodemailer');
 // Create transporter once and reuse it
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // Port 587 uses STARTTLS
+  port: 465,
+  secure: true, // Use SSL on Port 465
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  family: 4, // Force IPv4 to avoid ENETUNREACH issues on cloud hosts
+  family: 4, // Keep forcing IPv4
   tls: {
     rejectUnauthorized: false,
   },
   pool: true,
   maxConnections: 3,
   maxMessages: 100,
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
+  connectionTimeout: 20000, // Increased to 20 seconds
+  greetingTimeout: 20000,
   socketTimeout: 30000,
 });
 
