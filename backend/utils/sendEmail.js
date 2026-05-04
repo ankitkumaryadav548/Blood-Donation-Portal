@@ -1,32 +1,15 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-  // Using smtp.googlemail.com as an alternative to smtp.gmail.com
-  let host = 'smtp.googlemail.com';
-  try {
-    const dns = require('dns').promises;
-    const lookup = await dns.lookup('smtp.googlemail.com', { family: 4 });
-    host = lookup.address;
-    console.log('Resolved smtp.googlemail.com to IPv4:', host);
-  } catch (dnsErr) {
-    console.error('DNS Lookup failed, falling back to hostname:', dnsErr);
-  }
-
   const transporter = nodemailer.createTransport({
-    host: host,
+    host: 'smtp-relay.brevo.com', // Change this if you use a different service
     port: 587,
-    secure: false, // Port 587 uses STARTTLS
+    secure: false, 
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
-    tls: {
-      rejectUnauthorized: false,
-      servername: 'smtp.googlemail.com',
-    },
-    connectionTimeout: 40000, 
-    greetingTimeout: 40000,
-    socketTimeout: 60000,
+    connectionTimeout: 20000,
   });
 
   const message = {
