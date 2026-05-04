@@ -1,33 +1,52 @@
-const nodemailer = require('nodemailer');
+const https = require('https');
 
 const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com', // Change this if you use a different service
-    port: 587,
-    secure: false, 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+  const data = JSON.stringify({
+    sender: { 
+      name: process.env.FROM_NAME || 'Blood Donation Portal', 
+      email: 'ankityadav02032003@gmail.com' // Using your verified Brevo sender
     },
-    connectionTimeout: 20000,
+    to: [{ email: options.email }],
+    subject: options.subject,
+    textContent: options.message,
+    htmlContent: options.html,
   });
 
-  const message = {
-    from: `${process.env.FROM_NAME || 'Blood Donation Portal'} <${process.env.EMAIL_USER}>`,
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-    html: options.html,
+  const apiOptions = {
+    hostname: 'api.brevo.com',
+    path: '/v3/smtp/email',
+    method: 'POST',
+    headers: {
+      'api-key': process.env.EMAIL_PASS,
+      'Content-Type': 'application/json',
+      'Content-Length': data.length,
+    },
   };
 
-  try {
-    const info = await transporter.sendMail(message);
-    console.log('Message sent: %s', info.messageId);
-    return info;
-  } catch (error) {
-    console.error('Nodemailer Error:', error);
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    const req = https.request(apiOptions, (res) => {
+      let body = '';
+      res.on('data', (chunk) => body += chunk);
+      res.on('end', () => {
+        const response = JSON.parse(body);
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log('Email sent via Brevo API:', response.messageId);
+          resolve(response);
+        } else {
+          console.error('Brevo API Error:', response);
+          reject(new Error(response.message || 'Email sending failed'));
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      console.error('HTTPS Request Error:', error);
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
 };
 
 module.exports = sendEmail;
