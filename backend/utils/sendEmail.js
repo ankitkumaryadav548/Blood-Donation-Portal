@@ -18,11 +18,13 @@ const sendEmail = async (options) => {
     method: 'POST',
     headers: {
       'api-key': process.env.EMAIL_PASS,
-      'x-sib-api-key': process.env.EMAIL_PASS, // Standard header for Brevo API v3
+      'x-sib-api-key': process.env.EMAIL_PASS,
       'Content-Type': 'application/json',
       'Content-Length': data.length,
     },
   };
+
+  console.log('Attempting to send email with API key starting with:', process.env.EMAIL_PASS ? process.env.EMAIL_PASS.substring(0, 8) + '...' : 'MISSING');
 
   return new Promise((resolve, reject) => {
     const req = https.request(apiOptions, (res) => {
