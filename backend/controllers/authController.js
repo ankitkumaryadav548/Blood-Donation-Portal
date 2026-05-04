@@ -91,7 +91,10 @@ exports.register = async (req, res) => {
     } catch (err) {
       // If email fails, we might want to delete the user or keep it but inform them
       console.error('Email could not be sent', err);
-      res.status(500).json({ message: 'Error sending OTP. Please try again later.' });
+      res.status(500).json({ 
+        message: 'Error sending OTP. Please try again later.',
+        error: err.message 
+      });
     }
   } catch (error) {
     res.status(500).json({ message: 'Registration failed', error: error.message });
@@ -205,9 +208,13 @@ exports.resendOTP = async (req, res) => {
       success: true,
       message: 'New OTP sent to email',
     });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to resend OTP', error: error.message });
-  }
+    } catch (error) {
+      console.error('Email could not be sent', error);
+      res.status(500).json({ 
+        message: 'Failed to resend OTP', 
+        error: error.message 
+      });
+    }
 };
 
 // Login User

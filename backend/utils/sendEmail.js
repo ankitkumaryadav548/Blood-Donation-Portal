@@ -2,18 +2,16 @@ const nodemailer = require('nodemailer');
 
 // Create transporter once and reuse it
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // use SSL
-  pool: true, // use pooled connections
-  maxConnections: 5,
-  maxMessages: 100,
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  // Timeouts to prevent hanging
-  connectionTimeout: 10000, // 10 seconds
+  // Adding these for better reliability in cloud environments
+  pool: true,
+  maxConnections: 3,
+  maxMessages: 100,
+  connectionTimeout: 10000,
   greetingTimeout: 10000,
   socketTimeout: 30000,
 });
