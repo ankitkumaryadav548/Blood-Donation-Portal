@@ -57,8 +57,11 @@ const Register = () => {
       setAlert({ message: 'OTP sent to your email! Check your inbox.', type: 'success' });
       setShowOTP(true);
     } catch (error) {
+      const errorMsg = error.response?.data?.error 
+        ? `${error.response.data.message}: ${error.response.data.error}`
+        : (error.response?.data?.message || 'Registration failed');
       setAlert({
-        message: error.response?.data?.message || 'Registration failed',
+        message: errorMsg,
         type: 'error',
       });
     }
@@ -72,8 +75,11 @@ const Register = () => {
       const redirectPath = getRedirectPath(data.user.role);
       setTimeout(() => navigate(redirectPath), 1500);
     } catch (error) {
+      const errorMsg = error.response?.data?.error 
+        ? `${error.response.data.message}: ${error.response.data.error}`
+        : (error.response?.data?.message || 'Verification failed. Please try again.');
       setAlert({
-        message: error.response?.data?.message || 'Verification failed. Please try again.',
+        message: errorMsg,
         type: 'error',
       });
     }
@@ -84,8 +90,11 @@ const Register = () => {
       await resendOTP(formData.email);
       setAlert({ message: 'New OTP sent to your email!', type: 'success' });
     } catch (error) {
+      const errorMsg = error.response?.data?.error 
+        ? `${error.response.data.message}: ${error.response.data.error}`
+        : (error.response?.data?.message || 'Failed to resend OTP');
       setAlert({
-        message: error.response?.data?.message || 'Failed to resend OTP',
+        message: errorMsg,
         type: 'error',
       });
     }

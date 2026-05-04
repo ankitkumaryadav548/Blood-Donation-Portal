@@ -2,12 +2,16 @@ const nodemailer = require('nodemailer');
 
 // Create transporter once and reuse it
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // Port 587 uses STARTTLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  // Adding these for better reliability in cloud environments
+  tls: {
+    rejectUnauthorized: false, // Helps with certificate issues on some cloud hosts
+  },
   pool: true,
   maxConnections: 3,
   maxMessages: 100,
