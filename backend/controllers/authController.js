@@ -15,6 +15,14 @@ const generateToken = (user) => {
 // Register User
 exports.register = async (req, res) => {
   try {
+    // Check if database is connected
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ 
+        message: 'Database is currently disconnected. Please check your MongoDB Atlas IP whitelisting or connection string.' 
+      });
+    }
+
     const { name, email, phoneNo, password, role } = req.body;
 
     // Validation
@@ -25,7 +33,13 @@ exports.register = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Email already registered' });
+      if (existingUser.isVerified) {
+        return res.status(409).json({ message: 'Email already registered' });
+      } else {
+        // If user exists but is not verified, delete the old record to allow a fresh registration
+        // This is useful if the previous attempt failed at the email verification step
+        await User.deleteOne({ _id: existingUser._id });
+      }
     }
 
     // Generate 6-digit OTP
