@@ -1,27 +1,35 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter once and reuse it
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use SSL on Port 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4, // Keep forcing IPv4
-  tls: {
-    rejectUnauthorized: false,
-  },
-  pool: true,
-  maxConnections: 3,
-  maxMessages: 100,
-  connectionTimeout: 20000, // Increased to 20 seconds
-  greetingTimeout: 20000,
-  socketTimeout: 30000,
-});
-
 const sendEmail = async (options) => {
+  // Manually resolve to IPv4 address to bypass ENETUNREACH (IPv6) issues on cloud hosts
+  let host = 'smtp.gmail.com';
+  try {
+    const dns = require('dns').promises;
+    const lookup = await dns.lookup('smtp.gmail.com', { family: 4 });
+    host = lookup.address;
+    console.log('Resolved smtp.gmail.com to IPv4:', host);
+  } catch (dnsErr) {
+    console.error('DNS Lookup failed, falling back to hostname:', dnsErr);
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: host,
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
+      servername: 'smtp.gmail.com', // Required when connecting via IP address
+    },
+    pool: true,
+    maxConnections: 3,
+    connectionTimeout: 20000,
+    socketTimeout: 30000,
+  });
+
   const message = {
     from: `${process.env.FROM_NAME || 'Blood Donation Portal'} <${process.env.EMAIL_USER}>`,
     to: options.email,
